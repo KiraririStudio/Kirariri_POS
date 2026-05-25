@@ -48,6 +48,18 @@
       box-sizing: border-box;
     }
 
+    /* ✅ ✅ ✅ 關鍵修正（只改這裡） */
+    input[type="date"] {
+      text-align: left;        /* ✅ 避免 iPhone 置中 */
+      min-height: 44px;        /* ✅ 手機觸控高度 */
+      line-height: normal;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #f5a623;
+      outline: none;
+    }
+
     button {
       width: 100%;
       padding: 12px;
@@ -94,8 +106,7 @@
     <form id="saleForm">
 
       <label>日期</label>
-      <input type="text" id="date" readonly onclick="openPicker()" required>
-      <input type="date" id="hiddenDate" style="display:none;">
+      <input type="date" id="date" required>
 
       <label>廠商</label>
       <input type="text" id="vendor" required>
@@ -124,8 +135,7 @@
     <h2>查詢銷售</h2>
 
     <label>選擇日期</label>
-    <input type="text" id="queryDate" readonly onclick="openQueryPicker()">
-    <input type="date" id="hiddenQueryDate" style="display:none;">
+    <input type="date" id="queryDate">
 
     <button onclick="search()">查詢</button>
 
@@ -148,35 +158,12 @@
 </div>
 
 <script>
-  // ✅ 預設今天
   const today = new Date().toISOString().split("T")[0];
-
   document.getElementById("date").value = today;
-  document.getElementById("hiddenDate").value = today;
-
   document.getElementById("queryDate").value = today;
-  document.getElementById("hiddenQueryDate").value = today;
 
-  function openPicker() {
-    document.getElementById("hiddenDate").showPicker();
-  }
-
-  function openQueryPicker() {
-    document.getElementById("hiddenQueryDate").showPicker();
-  }
-
-  document.getElementById("hiddenDate").addEventListener("change", function() {
-    document.getElementById("date").value = this.value;
-  });
-
-  document.getElementById("hiddenQueryDate").addEventListener("change", function() {
-    document.getElementById("queryDate").value = this.value;
-  });
-
-  // ✅ mock資料
   let mockData = [];
 
-  // ✅ 新增
   document.getElementById("saleForm").addEventListener("submit", function(e){
     e.preventDefault();
 
@@ -194,11 +181,9 @@
     alert("新增成功 ✅");
 
     this.reset();
-
     document.getElementById("date").value = today;
   });
 
-  // ✅ 查詢
   function search() {
     const date = document.getElementById("queryDate").value;
 
