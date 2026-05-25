@@ -57,6 +57,7 @@
       color: white;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 5px;
     }
 
     button:hover {
@@ -86,14 +87,15 @@
 
 <div class="container">
 
-  <!-- ✅ 新增資料 -->
+  <!-- ✅ 新增 -->
   <div class="card">
     <h2>新增銷售</h2>
 
     <form id="saleForm">
 
       <label>日期</label>
-      <input type="date" id="date" required>
+      <input type="text" id="date" readonly onclick="openPicker()" required>
+      <input type="date" id="hiddenDate" style="display:none;">
 
       <label>廠商</label>
       <input type="text" id="vendor" required>
@@ -122,11 +124,12 @@
     <h2>查詢銷售</h2>
 
     <label>選擇日期</label>
-    <input type="date" id="queryDate">
+    <input type="text" id="queryDate" readonly onclick="openQueryPicker()">
+    <input type="date" id="hiddenQueryDate" style="display:none;">
 
     <button onclick="search()">查詢</button>
 
-    <table id="resultTable">
+    <table>
       <thead>
         <tr>
           <th>日期</th>
@@ -137,7 +140,7 @@
           <th>備註</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="resultBody"></tbody>
     </table>
 
   </div>
@@ -145,11 +148,32 @@
 </div>
 
 <script>
+  // ✅ 預設今天
   const today = new Date().toISOString().split("T")[0];
-  document.getElementById("date").value = today;
-  document.getElementById("queryDate").value = today;
 
-  // ✅ 模擬資料（之後拿掉）
+  document.getElementById("date").value = today;
+  document.getElementById("hiddenDate").value = today;
+
+  document.getElementById("queryDate").value = today;
+  document.getElementById("hiddenQueryDate").value = today;
+
+  function openPicker() {
+    document.getElementById("hiddenDate").showPicker();
+  }
+
+  function openQueryPicker() {
+    document.getElementById("hiddenQueryDate").showPicker();
+  }
+
+  document.getElementById("hiddenDate").addEventListener("change", function() {
+    document.getElementById("date").value = this.value;
+  });
+
+  document.getElementById("hiddenQueryDate").addEventListener("change", function() {
+    document.getElementById("queryDate").value = this.value;
+  });
+
+  // ✅ mock資料
   let mockData = [];
 
   // ✅ 新增
@@ -170,6 +194,7 @@
     alert("新增成功 ✅");
 
     this.reset();
+
     document.getElementById("date").value = today;
   });
 
@@ -179,11 +204,11 @@
 
     const result = mockData.filter(item => item.date === date);
 
-    const tbody = document.querySelector("#resultTable tbody");
+    const tbody = document.getElementById("resultBody");
     tbody.innerHTML = "";
 
     result.forEach(item => {
-      const row = `
+      tbody.innerHTML += `
         <tr>
           <td>${item.date}</td>
           <td>${item.vendor}</td>
@@ -193,7 +218,6 @@
           <td>${item.note || ""}</td>
         </tr>
       `;
-      tbody.innerHTML += row;
     });
   }
 </script>
