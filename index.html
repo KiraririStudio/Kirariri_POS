@@ -55,8 +55,22 @@
 
     /* ✅ 日期欄位修正（關鍵） */
     input[type="date"] {
-      padding-right: 10px; /* 保留空間給 icon */
-      min-height: 44px;   /* 手機觸控高度 */
+      -webkit-appearance: none;
+      appearance: none;
+    
+      text-align: left;         /* ✅ 修正置中 */
+      padding-right: 40px;      /* ✅ 留空間給 icon */
+      min-height: 44px;
+    
+      position: relative;
+    }
+    
+    /* ✅ 強化日曆 icon（iOS專用） */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      right: 10px;
+      opacity: 1;
+      cursor: pointer;
     }
 
     input:focus, select:focus, textarea:focus {
