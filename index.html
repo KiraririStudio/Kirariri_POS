@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>銷售紀錄</title>
+  <title>銷售系統</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,34 +10,31 @@
     body {
       font-family: Arial;
       background-color: #f5f5f5;
-
+      margin: 0;
+      padding: 20px;
       display: flex;
       justify-content: center;
-      align-items: center;
-
-      height: 100vh;
-      margin: 0;
     }
 
     .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .card {
       background: white;
-      padding: 25px 30px;
+      padding: 20px;
       border-radius: 12px;
-
-      width: 90%;
-      max-width: 420px;
-
+      margin-bottom: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 20px;
     }
 
     label {
       font-weight: bold;
-      font-size: 14px;
     }
 
     input, select, textarea {
@@ -45,52 +42,18 @@
       padding: 12px;
       margin-top: 5px;
       margin-bottom: 15px;
-
       border: 2px solid #ddd;
       border-radius: 8px;
-
       font-size: 15px;
       box-sizing: border-box;
-    }
-
-    /* ✅ 日期欄位修正（關鍵） */
-    input[type="date"] {
-      -webkit-appearance: none;
-      appearance: none;
-    
-      text-align: left;         /* ✅ 修正置中 */
-      padding-right: 40px;      /* ✅ 留空間給 icon */
-      min-height: 44px;
-    
-      position: relative;
-    }
-    
-    /* ✅ 強化日曆 icon（iOS專用） */
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      position: absolute;
-      right: 10px;
-      opacity: 1;
-      cursor: pointer;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: #f5a623;
-      outline: none;
-    }
-
-    select {
-      background-color: #fff;
-      cursor: pointer;
     }
 
     button {
       width: 100%;
       padding: 12px;
-
       background-color: #f5a623;
       border: none;
       border-radius: 8px;
-
       color: white;
       font-size: 16px;
       cursor: pointer;
@@ -100,12 +63,20 @@
       background-color: #d48806;
     }
 
-    /* ✅ 小螢幕高度不足避免卡死 */
-    @media (max-height: 650px) {
-      body {
-        align-items: flex-start;
-        padding-top: 20px;
-      }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #ffe5c2;
     }
   </style>
 
@@ -113,9 +84,11 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <h2>銷售紀錄</h2>
+  <!-- ✅ 新增資料 -->
+  <div class="card">
+    <h2>新增銷售</h2>
 
     <form id="saleForm">
 
@@ -132,7 +105,7 @@
       <input type="number" id="price" required>
 
       <label>付款方式</label>
-      <select id="payment" required>
+      <select id="payment">
         <option value="cash">現金</option>
         <option value="transfer">轉帳</option>
       </select>
@@ -140,37 +113,90 @@
       <label>備註</label>
       <textarea id="note"></textarea>
 
-      <button type="submit">送出</button>
-
+      <button type="submit">新增</button>
     </form>
+  </div>
+
+  <!-- ✅ 查詢 -->
+  <div class="card">
+    <h2>查詢銷售</h2>
+
+    <label>選擇日期</label>
+    <input type="date" id="queryDate">
+
+    <button onclick="search()">查詢</button>
+
+    <table id="resultTable">
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>廠商</th>
+          <th>商品</th>
+          <th>金額</th>
+          <th>付款</th>
+          <th>備註</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
   </div>
 
-  <script>
-    // ✅ 預設今天
-    const today = new Date().toISOString().split("T")[0];
+</div>
+
+<script>
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("date").value = today;
+  document.getElementById("queryDate").value = today;
+
+  // ✅ 模擬資料（之後拿掉）
+  let mockData = [];
+
+  // ✅ 新增
+  document.getElementById("saleForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const data = {
+      date: document.getElementById("date").value,
+      vendor: document.getElementById("vendor").value,
+      product: document.getElementById("product").value,
+      price: document.getElementById("price").value,
+      payment: document.getElementById("payment").value,
+      note: document.getElementById("note").value
+    };
+
+    mockData.push(data);
+
+    alert("新增成功 ✅");
+
+    this.reset();
     document.getElementById("date").value = today;
+  });
 
-    document.getElementById("saleForm").addEventListener("submit", function(e) {
-        e.preventDefault();
+  // ✅ 查詢
+  function search() {
+    const date = document.getElementById("queryDate").value;
 
-        const data = {
-            date: document.getElementById("date").value,
-            vendor: document.getElementById("vendor").value,
-            product: document.getElementById("product").value,
-            price: parseInt(document.getElementById("price").value),
-            payment: document.getElementById("payment").value,
-            note: document.getElementById("note").value
-        };
+    const result = mockData.filter(item => item.date === date);
 
-        console.log(data);
+    const tbody = document.querySelector("#resultTable tbody");
+    tbody.innerHTML = "";
 
-        alert("已送出 ✅");
-
-        this.reset();
-        document.getElementById("date").value = today;
+    result.forEach(item => {
+      const row = `
+        <tr>
+          <td>${item.date}</td>
+          <td>${item.vendor}</td>
+          <td>${item.product}</td>
+          <td>${item.price}</td>
+          <td>${item.payment}</td>
+          <td>${item.note || ""}</td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
     });
-  </script>
+  }
+</script>
 
 </body>
 </html>
