@@ -53,9 +53,20 @@
       box-sizing: border-box;
     }
 
+    /* ✅ 日期欄位修正（關鍵） */
+    input[type="date"] {
+      padding-right: 10px; /* 保留空間給 icon */
+      min-height: 44px;   /* 手機觸控高度 */
+    }
+
     input:focus, select:focus, textarea:focus {
       border-color: #f5a623;
       outline: none;
+    }
+
+    select {
+      background-color: #fff;
+      cursor: pointer;
     }
 
     button {
@@ -75,7 +86,7 @@
       background-color: #d48806;
     }
 
-    /* ✅ 小螢幕再優化 */
+    /* ✅ 小螢幕高度不足避免卡死 */
     @media (max-height: 650px) {
       body {
         align-items: flex-start;
@@ -122,6 +133,7 @@
   </div>
 
   <script>
+    // ✅ 預設今天
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("date").value = today;
 
@@ -138,6 +150,7 @@
         };
 
         console.log(data);
+
         alert("已送出 ✅");
 
         this.reset();
@@ -147,3 +160,4 @@
 
 </body>
 </html>
+``
