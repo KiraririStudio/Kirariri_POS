@@ -228,7 +228,7 @@
               <td>${item.vendor}</td>
               <td>${item.product}</td>
               <td>${item.price}</td>
-              <td>${item.payment}</td>
+              <td>${item.payment === "cash" ? "現金" : "轉帳"}</td>
               <td>${item.note || ""}</td>
               <td>
                 <button class="delete-btn" onclick="deleteItem(${item.id})">
