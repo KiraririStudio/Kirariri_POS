@@ -133,6 +133,7 @@
       <select id="payment">
         <option value="cash">現金</option>
         <option value="transfer">轉帳</option>
+        <option value="linepay">Line Pay（限光冉）</option>
       </select>
 
       <label>備註</label>
@@ -205,7 +206,12 @@
     });
 
   function search() {
-    const date = document.getElementById("queryDate").value;
+    const date = document.getElementById("queryDate").value;    
+    const paymentMap = {
+      cash: "現金",
+      transfer: "轉帳",
+      linepay: "Line Pay（限光冉）"
+    };
   
     fetch(`https://hairbooking-backend.onrender.com/sales?date=${date}`)
       .then(res => res.json())
@@ -228,7 +234,7 @@
               <td>${item.vendor}</td>
               <td>${item.product}</td>
               <td>${item.price}</td>
-              <td>${item.payment === "cash" ? "現金" : "轉帳"}</td>
+              <td>${paymentMap[item.payment] || item.payment}</td>
               <td>${item.note || ""}</td>
               <td>
                 <button class="delete-btn" onclick="deleteItem(${item.id})">
