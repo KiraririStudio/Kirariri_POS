@@ -48,11 +48,23 @@
       box-sizing: border-box;
     }
 
-    /* ✅ ✅ ✅ 關鍵修正（只改這裡） */
     input[type="date"] {
-      text-align: left;        /* ✅ 避免 iPhone 置中 */
-      min-height: 44px;        /* ✅ 手機觸控高度 */
-      line-height: normal;
+      -webkit-appearance: none;
+      appearance: none;
+    
+      text-align: left;         /* ✅ 修正置中 */
+      padding-right: 40px;      /* ✅ 留空間給 icon */
+      min-height: 44px;
+    
+      position: relative;
+    }
+    
+    /* ✅ 強化日曆 icon（iOS專用） */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      right: 10px;
+      opacity: 1;
+      cursor: pointer;
     }
 
     input:focus, select:focus, textarea:focus {
