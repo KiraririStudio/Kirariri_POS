@@ -174,9 +174,6 @@
   const today = new Date().toISOString().split("T")[0];
   document.getElementById("date").value = today;
   document.getElementById("queryDate").value = today;
-
-  let mockData = [];
-
   document.getElementById("saleForm").addEventListener("submit", function(e){
     e.preventDefault();
 
@@ -189,56 +186,75 @@
       note: document.getElementById("note").value
     };
 
-    mockData.push(data);
-
-    alert("新增成功 ✅");
-
-    this.reset();
-    document.getElementById("date").value = today;
-  });
+    
+    fetch("https://hairbooking-backend.onrender.com/sales", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(res => {
+        alert("新增成功 ✅");
+    
+        document.getElementById("saleForm").reset();
+        document.getElementById("date").value = today;
+      });
+    
+    });
 
   function search() {
     const date = document.getElementById("queryDate").value;
   
-    const result = mockData.filter(item => item.date === date);
+    fetch(`https://hairbooking-backend.onrender.com/sales?date=${date}`)
+      .then(res => res.json())
+      .then(result => {
   
-    const tbody = document.getElementById("resultBody");
-    tbody.innerHTML = "";
+        const tbody = document.getElementById("resultBody");
+        tbody.innerHTML = "";
   
-    result.forEach((item, index) => {
-      const realIndex = mockData.indexOf(item);
+        if (result.length === 0) {
+          tbody.innerHTML = `
+            <tr><td colspan="7">沒有資料</td></tr>
+          `;
+          return;
+        }
   
-      tbody.innerHTML += `
-        <tr>
-          <td>${item.date}</td>
-          <td>${item.vendor}</td>
-          <td>${item.product}</td>
-          <td>${item.price}</td>
-          <td>${item.payment}</td>
-          <td>${item.note || ""}</td>
-          <td>
-            <button onclick="deleteItem(${realIndex})">刪除</button>
-          </td>
-        </tr>
-      `;
+        result.forEach(item => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${item.date}</td>
+              <td>${item.vendor}</td>
+              <td>${item.product}</td>
+              <td>${item.price}</td>
+              <td>${item.payment}</td>
+              <td>${item.note || ""}</td>
+              <td>
+                <button class="delete-btn" onclick="deleteItem(${item.id})">
+                  刪除
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      });
+  }
+
+  function deleteItem(id) {
+    const ok = confirm("確定要刪除這筆資料嗎？");
+    if (!ok) return;
+  
+    fetch(`https://hairbooking-backend.onrender.com/sales/${id}`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(() => {
+      alert("刪除成功 ✅");
+      search(); // ✅ 重新載入
     });
   }
 
-  function deleteItem(index) {
-    const item = mockData[index];
-  
-    const ok = confirm(
-      `確定要刪除這筆資料嗎？\n\n商品：${item.product}\n金額：${item.price}`
-    );
-  
-    if (!ok) return;
-  
-    // ✅ 從陣列刪掉
-    mockData.splice(index, 1);
-  
-    // ✅ 重新查詢刷新畫面
-    search();
-  }
 </script>
 
 </body>
