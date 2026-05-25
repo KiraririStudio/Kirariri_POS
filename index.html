@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>銷售紀錄</title>
+</head>
+<body>
+
+  <h2>今日銷售紀錄</h2>
+
+  <form id="saleForm">
+
+    <label>日期：</label><br>
+    <input type="date" id="date" required><br><br>
+
+    <label>廠商：</label><br>
+    <input type="text" id="vendor" required><br><br>
+
+    <label>商品名稱：</label><br>
+    <input type="text" id="product" required><br><br>
+
+    <label>價格：</label><br>
+    <input type="number" id="price" required><br><br>
+
+    <label>付款方式：</label><br>
+    <select id="payment" required>
+      <option value="cash">現金</option>
+      <option value="transfer">轉帳</option>
+    </select><br><br>
+
+    <label>備註：</label><br>
+    <textarea id="note"></textarea><br><br>
+
+    <button type="submit">送出</button>
+
+  </form>
+
+  <hr>
+
+  <h3>預覽資料</h3>
+  <pre id="result"></pre>
+
+  <script>
+    // ✅ 預設今天日期
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById("date").value = today;
+
+    // ✅ 表單送出
+    document.getElementById("saleForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const data = {
+            date: document.getElementById("date").value,
+            vendor: document.getElementById("vendor").value,
+            product: document.getElementById("product").value,
+            price: parseInt(document.getElementById("price").value),
+            payment: document.getElementById("payment").value,
+            note: document.getElementById("note").value
+        };
+
+        console.log("送出資料:", data);
+
+        // ✅ 顯示在畫面（測試用）
+        document.getElementById("result").innerText =
+            JSON.stringify(data, null, 2);
+    });
+  </script>
+
+</body>
+</html>
