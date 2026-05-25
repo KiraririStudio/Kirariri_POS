@@ -160,6 +160,7 @@
           <th>金額</th>
           <th>付款</th>
           <th>備註</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody id="resultBody"></tbody>
@@ -198,13 +199,15 @@
 
   function search() {
     const date = document.getElementById("queryDate").value;
-
+  
     const result = mockData.filter(item => item.date === date);
-
+  
     const tbody = document.getElementById("resultBody");
     tbody.innerHTML = "";
-
-    result.forEach(item => {
+  
+    result.forEach((item, index) => {
+      const realIndex = mockData.indexOf(item);
+  
       tbody.innerHTML += `
         <tr>
           <td>${item.date}</td>
@@ -213,9 +216,28 @@
           <td>${item.price}</td>
           <td>${item.payment}</td>
           <td>${item.note || ""}</td>
+          <td>
+            <button onclick="deleteItem(${realIndex})">刪除</button>
+          </td>
         </tr>
       `;
     });
+  }
+
+  function deleteItem(index) {
+    const item = mockData[index];
+  
+    const ok = confirm(
+      `確定要刪除這筆資料嗎？\n\n商品：${item.product}\n金額：${item.price}`
+    );
+  
+    if (!ok) return;
+  
+    // ✅ 從陣列刪掉
+    mockData.splice(index, 1);
+  
+    // ✅ 重新查詢刷新畫面
+    search();
   }
 </script>
 
