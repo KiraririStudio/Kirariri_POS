@@ -172,7 +172,7 @@
 </div>
 
 <script>
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString('sv-SE');
   document.getElementById("date").value = today;
   document.getElementById("queryDate").value = today;
   document.getElementById("saleForm").addEventListener("submit", function(e){
