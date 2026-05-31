@@ -82,10 +82,19 @@
       font-size: 16px;
       cursor: pointer;
       margin-top: 5px;
+      -webkit-tap-highlight-color: transparent;  /* ✅ 關閉藍色/灰色點擊效果 */
+    }
+
+    button:active {
+      background-color: #d48806;  /* 按下顏色（你 hover 那個） */
     }
 
     button:hover {
       background-color: #d48806;
+    }
+    
+    button:not(:active) {
+      background-color: #f5a623;
     }
 
     table {
