@@ -92,17 +92,34 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
+      table-layout: fixed;
     }
 
     th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
+      word-break: break-word;   /* ✅ 強制斷行 */
+      font-size: 13px;          /* ✅ 手機變小一點 */
+      padding: 6px;             /* ✅ 減少空間 */
     }
 
     th {
       background-color: #ffe5c2;
     }
+
+    th:nth-child(1), td:nth-child(1) { width: 15%; }  /* 日期 */
+    th:nth-child(2), td:nth-child(2) { width: 12%; }  /* 廠商 */
+    th:nth-child(3), td:nth-child(3) { width: 15%; }  /* 商品 */
+    th:nth-child(4), td:nth-child(4) { width: 10%; }  /* 金額 */
+    th:nth-child(5), td:nth-child(5) { width: 15%; }  /* 付款 */
+    th:nth-child(6), td:nth-child(6) { width: 13%; }  /* 備註 */
+    th:nth-child(7), td:nth-child(7) { width: 10%; }  /* 按鈕 */
+
+    .delete-btn {
+      width: auto;
+      padding: 5px 6px;
+      font-size: 12px;
+    }
+
+    
   </style>
 
 </head>
