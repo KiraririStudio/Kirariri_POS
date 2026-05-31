@@ -226,11 +226,12 @@
       })
       .then(res => res.json())
       .then(res => {
-        alert("新增成功 ✅");
-    
-        document.getElementById("saleForm").reset();
-        document.getElementById("date").value = today;
-      });
+          document.activeElement.blur();   // ✅ 先移除 focus
+          alert("新增成功 ✅");
+        
+          document.getElementById("saleForm").reset();
+          document.getElementById("date").value = today;
+        });
     
     });
 
@@ -285,8 +286,9 @@
     })
     .then(res => res.json())
     .then(() => {
+      document.activeElement.blur();   // ✅ 先移除 focus
       alert("刪除成功 ✅");
-      search(); // ✅ 重新載入
+      search();
     });
   }
 
