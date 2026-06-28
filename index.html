@@ -286,15 +286,18 @@
         });
       });
     
-  // ✅ 查月份總銷售
-  const month = date.slice(0, 7);
   
-  fetch(`https://hairbooking-backend.onrender.com/sales/month-total?month=${month}`)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("monthlyTotal").innerText =
-        `${month} 月總銷售：$${data.total}`;
-
+  // ✅ ✅ ✅ 月總銷售（這段是你原本錯的地方）
+    if (date) {
+      const month = date.slice(0, 7);
+  
+      fetch(`https://hairbooking-backend.onrender.com/sales/month-total?month=${month}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("monthlyTotal").innerText =
+            month + " 月總銷售：$" + data.total;
+        });
+    }
   }
 
   function deleteItem(id) {
