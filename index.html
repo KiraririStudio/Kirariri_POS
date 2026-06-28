@@ -142,10 +142,8 @@
 
   <!-- ✅ 新增 -->
   <div class="card">
-    <h2>新增銷售</h2>
-
+    <h2>新增銷售</h2>    
     <form id="saleForm">
-
       <label>選擇日期</label>
       <input type="date" id="date" required>
 
@@ -175,6 +173,18 @@
   <!-- ✅ 查詢 -->
   <div class="card">
     <h2>查詢銷售</h2>
+    
+    <div id="monthlyTotal" style="
+      background:#fff4e5;
+      padding:12px;
+      border-radius:10px;
+      margin-bottom:12px;
+      font-weight:bold;
+      text-align:center;
+      font-size:16px;
+    ">
+      本月總銷售：載入中...
+    </div>
 
     <label>選擇日期</label>
     <input type="date" id="queryDate">
@@ -275,6 +285,16 @@
           `;
         });
       });
+    
+  // ✅ 查月份總銷售
+  const month = date.slice(0, 7);
+  
+  fetch(`https://hairbooking-backend.onrender.com/sales/month-total?month=${month}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("monthlyTotal").innerText =
+        `${month} 月總銷售：$${data.total}`;
+
   }
 
   function deleteItem(id) {
@@ -292,6 +312,10 @@
     });
   }
 
+  // ✅一進視窗就顯示當月銷售
+  window.onload = function(){
+    search();
+  }
 </script>
 
 </body>
